@@ -16,39 +16,55 @@ function App() {
   const [sort, setSort] = useState("Asc");
 
   const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
 
-  useEffect((userId, listagem) => {
+  useEffect(
+    (listagem) => {
+      fetch("127.0.0.1:3000/tarefas", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify({
+          usuario_id: userId,
+          listagem: listagem,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setTodos(data.tarefa);
+        })
+        .catch((error) => {
+          console.error("Erro:", error);
+        });
+    },
+    [token, userId]
+  );
+
+  const addTodo = (titulo, desc, data, prioridade) => {
     fetch("127.0.0.1:3000/tarefas", {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: token,
       },
       body: JSON.stringify({
         usuario_id: userId,
-        listagem: listagem,
+        titulo: titulo,
+        descricao: desc,
+        data_hora: data,
+        prioridade: prioridade,
+        timezone: "America/Cuiaba",
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        setTodos(data.tarefa);
+        setTodos(data);
       })
       .catch((error) => {
         console.error("Erro:", error);
       });
-  }, []);
-
-  const addTodo = (text, category) => {
-    const newTodos = [
-      ...todos,
-      {
-        id: Date.now(),
-        text,
-        category,
-        isCompleted: false,
-      },
-    ];
-    setTodos(newTodos);
   };
 
   const removeTodo = (id) => {
