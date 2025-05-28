@@ -1,49 +1,63 @@
-import { useState } from 'react';
-import './LoginPage.css'; // Arquivo CSS que criaremos
+import { useState } from "react";
+import "./LoginPage.css"; // Arquivo CSS que criaremos
 
 const LoginPage = ({ onLogin }) => {
   const [formData, setFormData] = useState({
-    username: '',
-    password: ''
+    username: "",
+    password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     // Limpar erro quando usuário começar a digitar
-    if (error) setError('');
+    if (error) setError("");
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     // Validação básica
     if (!formData.username.trim() || !formData.password.trim()) {
-      setError('Por favor, preencha todos os campos');
+      setError("Por favor, preencha todos os campos");
       return;
     }
 
     setIsLoading(true);
-    setError('');
-    
+    setError("");
+
     // Simular verificação de login (você pode substituir por sua lógica real)
     setTimeout(() => {
       // Aqui você pode adicionar validação real de usuário/senha
       // Por exemplo: verificar se username === 'admin' && password === '123456'
-      
-      if (formData.username === 'admin' && formData.password === '123456') {
-        // Login bem-sucedido
-        onLogin(formData);
-      } else {
-        // Login falhou
-        setError('Usuário ou senha incorretos');
-      }
-      
+
+      fetch("http://127.0.0.1:3000/usuario/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nome: formData.username.trim(),
+          senha: formData.password.trim(),
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("userId", data.user.id);
+          console.log({ data });
+          onLogin(formData);
+        })
+        .catch((error) => {
+          console.error("Erro:", error);
+          setError("Usuário ou senha incorretos");
+        });
+
       setIsLoading(false);
     }, 1000);
   };
@@ -85,19 +99,20 @@ const LoginPage = ({ onLogin }) => {
 
           {error && <div className="error-message">{error}</div>}
 
-          <button 
+          <button
             onClick={handleSubmit}
             disabled={isLoading}
             className="login-button"
           >
-            {isLoading ? 'Entrando...' : 'Entrar'}
+            {isLoading ? "Entrando..." : "Entrar"}
           </button>
         </div>
 
-        <div className="login-help">
-          <p><strong>Credenciais de teste:</strong></p>
-          <p>Usuário: admin</p>
-          <p>Senha: 123456</p>
+        <div className="register-help">
+          <p>Ainda não tem uma conta? </p>
+          <button type="button" className="link-button" disabled={isLoading}>
+            Faça registro aqui
+          </button>
         </div>
       </div>
     </div>
