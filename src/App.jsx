@@ -8,6 +8,7 @@ import Search from "./components/Search";
 import Filter from "./components/Filter";
 
 import LoginPage from "./components/LoginPage"; // Importar o componente de login
+import RegisterPage from "./components/RegisterPage";
 
 function App() {
   const [todos, setTodos] = useState([]);
