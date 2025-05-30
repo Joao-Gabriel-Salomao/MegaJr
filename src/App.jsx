@@ -10,10 +10,14 @@ import Filter from "./components/Filter";
 import LoginPage from "./components/LoginPage"; // Importar o componente de login
 import RegisterPage from "./components/RegisterPage";
 
+
+
 function App() {
   const [todos, setTodos] = useState([]);
 
   const [search, setSearch] = useState("");
+
+  const [showRegister, setShowRegister] = useState(false);
 
   const [filter, setFilter] = useState("All");
   const [sort, setSort] = useState("Asc");
@@ -107,7 +111,14 @@ function App() {
 
   // Se não estiver autenticado, mostrar página de login
   if (!isAuthenticated) {
-    return <LoginPage onLogin={handleLogin} />;
+    return showRegister ? (
+    <RegisterPage onSwitchToLogin={() => setShowRegister(false)} />
+  ) : (
+    <LoginPage 
+      onLogin={handleLogin} 
+      onSwitchToRegister={() => setShowRegister(true)} 
+    />
+  );
   }
 
   // Se estiver autenticado, mostrar a aplicação principal

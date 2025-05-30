@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./LoginPage.css"; // Arquivo CSS que criaremos
 
-const LoginPage = ({ onLogin }) => {
+const LoginPage = ({ onLogin, onSwitchToRegister }) => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -110,8 +110,13 @@ const LoginPage = ({ onLogin }) => {
 
         <div className="register-help">
           <p>Ainda não tem uma conta? </p>
-          <button type="button" className="link-button" disabled={isLoading}>
-            Faça registro aqui
+          <button
+          type="button"
+          className="link-button"
+          disabled={isLoading}
+          onClick={onSwitchToRegister} // <-- Chama a função que alterna para a página de registro
+          >
+          Faça registro aqui
           </button>
         </div>
       </div>
