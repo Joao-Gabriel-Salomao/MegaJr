@@ -1,44 +1,3 @@
-<<<<<<< HEAD
-import { useState } from 'react'
-import "./App.css"
-import Todo from "./components/Todo"
-import TodoForm from './components/TodoForm';
-import Search from './components/Search';
-import Filter from './components/Filter';
-import LoginPage from './components/LoginPage'; // Importar o componente de login
-
-function App() {
-  // Estado para controlar se o usuário está logado
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentUser, setCurrentUser] = useState('');
-
-  const [todos, setTodos] = useState([]);
-  const [search, setSearch] = useState("")
-  const [filter, setFilter] = useState('All');
-  const [sort, setSort] = useState("Asc");
-
-  // Função para fazer login
-  const handleLogin = (userData) => {
-    setCurrentUser(userData.username);
-    setIsAuthenticated(true);
-  };
-
-  // Função para fazer logout
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    setCurrentUser('');
-    setTodos([]); // Limpar todos ao fazer logout
-  };
-
-  const addTodo = (text, category) => {
-    const newTodos = [...todos, {
-      id: Date.now(),
-      text,
-      category,
-      isCompleted: false,
-    }];
-    setTodos(newTodos);
-=======
 import { useState } from "react";
 import { useEffect } from "react";
 
@@ -106,7 +65,6 @@ function App() {
       .catch((error) => {
         console.error("Erro:", error);
       });
->>>>>>> a714080a10c1585f0b5c3253a195d7454c4c910c
   };
 
   const removeTodo = (id) => {
@@ -118,19 +76,11 @@ function App() {
   };
 
   const completeTodo = (id) => {
-<<<<<<< HEAD
     const newTodos = [...todos]
     newTodos.map((todo) => todo.id === id ? todo.isCompleted = !todo.isCompleted : todo)
-=======
-    const newTodos = [...todos];
-    newTodos.map((todo) =>
-      todo.id === id ? (todo.isCompleted = !todo.isCompleted) : todo
-    );
->>>>>>> a714080a10c1585f0b5c3253a195d7454c4c910c
     setTodos(newTodos);
   };
 
-<<<<<<< HEAD
   // Se não estiver autenticado, mostrar página de login
   if (!isAuthenticated) {
     return <LoginPage onLogin={handleLogin} />;
@@ -153,13 +103,6 @@ function App() {
       <Search search={search} setSearch={setSearch}/>
       <Filter filter={filter} setFilter={setFilter} setSort={setSort}/>
       
-=======
-  return (
-    <div className="app">
-      <h1>Lista de Tarefas</h1>
-      <Search search={search} setSearch={setSearch} />
-      <Filter filter={filter} setFilter={setFilter} setSort={setSort} />
->>>>>>> a714080a10c1585f0b5c3253a195d7454c4c910c
       <div className="todo-list">
         {todos
           .filter((todo) => {
@@ -168,7 +111,6 @@ function App() {
             if (filter === "Incomplete") return todo.isCompleted === false;
             return true;
           })
-<<<<<<< HEAD
           .filter((todo) => todo.text.toLowerCase().includes(search.toLowerCase()))
           .sort((a, b) => sort === "Asc" ? a.text.localeCompare(b.text) : b.text.localeCompare(a.text))
           .map((todo) => (
@@ -183,28 +125,3 @@ function App() {
 }
 
 export default App
-=======
-          .filter((todo) =>
-            todo.text.toLowerCase().includes(search.toLowerCase())
-          )
-          .sort((a, b) =>
-            sort === "Asc"
-              ? a.text.localeCompare(b.text)
-              : b.text.localeCompare(a.text)
-          )
-          .map((todo) => (
-            <Todo
-              key={todo.id}
-              todo={todo}
-              removeTodo={removeTodo}
-              completeTodo={completeTodo}
-            />
-          ))}
-      </div>
-      <TodoForm addTodo={addTodo} />
-    </div>
-  );
-}
-
-export default App;
->>>>>>> a714080a10c1585f0b5c3253a195d7454c4c910c
