@@ -1,12 +1,13 @@
 /* LoginPage.css */
 .login-container {
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
   font-family: Arial, sans-serif;
+  height: 100vh;
+  width: 100vw;
+  margin: -2.4rem;
 }
 
 .login-card {
@@ -114,4 +115,33 @@
 
 .login-help strong {
   color: #333;
+}
+
+.register-help {
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0;
+  margin: 0;
+}
+
+.link-button:hover {
+  color: #0056b3;
+  text-decoration: none;
+}
+
+.link-button:disabled {
+  color: #6c757d;
+  cursor: not-allowed;
+  text-decoration: none;
 }

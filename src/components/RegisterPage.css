@@ -1,0 +1,59 @@
+/* Estilos adicionais para a página de registro */
+/* Adicione este CSS ao seu arquivo LoginPage.css existente */
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #c3e6cb;
+  margin-bottom: 15px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0;
+  margin: 0;
+}
+
+.link-button:hover {
+  color: #0056b3;
+  text-decoration: none;
+}
+
+.link-button:disabled {
+  color: #6c757d;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+/* Ajustes para formulários maiores */
+.login-card {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Espaçamento melhor para formulários com mais campos */
+.form-group + .form-group {
+  margin-top: 15px;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 480px) {
+  .login-card {
+    margin: 10px;
+    padding: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 12px;
+  }
+}

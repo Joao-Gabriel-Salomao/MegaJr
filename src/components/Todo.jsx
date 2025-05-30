@@ -1,5 +1,3 @@
-import React from "react";
-
 const Todo = ({ todo, removeTodo, completeTodo }) => {
   return (
     <div>
@@ -8,7 +6,7 @@ const Todo = ({ todo, removeTodo, completeTodo }) => {
         style={{ textDecoration: todo.isCompleted ? "line-through" : "" }}
       >
         <div className="content">
-          <p>{todo.text}</p>
+          <p>{todo.titulo}</p>
           <div className="category">({todo.category})</div>
         </div>
         <div>

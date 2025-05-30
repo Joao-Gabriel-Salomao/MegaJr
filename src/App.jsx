@@ -7,6 +7,9 @@ import TodoForm from "./components/TodoForm";
 import Search from "./components/Search";
 import Filter from "./components/Filter";
 
+import LoginPage from "./components/LoginPage"; // Importar o componente de login
+import RegisterPage from "./components/RegisterPage";
+
 function App() {
   const [todos, setTodos] = useState([]);
 
@@ -17,30 +20,36 @@ function App() {
 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
+  const [tipoListagem, setTipoListagem] = useState("concluida");
 
-  useEffect(
-    (listagem) => {
-      fetch("127.0.0.1:3000/tarefas", {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState("");
+
+  useEffect(() => {
+    fetch(
+      `http://127.0.0.1:3000/tarefas?usuario_id=${userId}&tipoListagem=${tipoListagem}`,
+      {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
         },
-        body: JSON.stringify({
-          usuario_id: userId,
-          listagem: listagem,
-        }),
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Erro ${response.status}`);
+        }
+        return response.json();
       })
-        .then((response) => response.json())
-        .then((data) => {
-          setTodos(data.tarefa);
-        })
-        .catch((error) => {
-          console.error("Erro:", error);
-        });
-    },
-    [token, userId]
-  );
+      .then((data) => {
+        console.log(data.tarefa);
+        setTodos(data.tarefa);
+      })
+      .catch((error) => {
+        console.error("Erro:", error);
+      });
+  }, [token, userId, tipoListagem]);
 
   const addTodo = (titulo, desc, data, prioridade) => {
     fetch("127.0.0.1:3000/tarefas", {
@@ -76,9 +85,24 @@ function App() {
   };
 
   const completeTodo = (id) => {
-    const newTodos = [...todos]
-    newTodos.map((todo) => todo.id === id ? todo.isCompleted = !todo.isCompleted : todo)
+    const newTodos = [...todos];
+    newTodos.map((todo) =>
+      todo.id === id ? (todo.isCompleted = !todo.isCompleted) : todo
+    );
     setTodos(newTodos);
+  };
+
+  // Função para fazer login
+  const handleLogin = (userData) => {
+    setCurrentUser(userData.username);
+    setIsAuthenticated(true);
+  };
+
+  // Função para fazer logout
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setCurrentUser("");
+    setTodos([]); // Limpar todos ao fazer logout
   };
 
   // Se não estiver autenticado, mostrar página de login
@@ -88,7 +112,7 @@ function App() {
 
   // Se estiver autenticado, mostrar a aplicação principal
   return (
-    <div className='app'>
+    <div className="app">
       {/* Header com informações do usuário e logout */}
       <div className="app-header">
         <h1>Lista de Tarefas</h1>
@@ -99,10 +123,10 @@ function App() {
           </button>
         </div>
       </div>
-      
-      <Search search={search} setSearch={setSearch}/>
-      <Filter filter={filter} setFilter={setFilter} setSort={setSort}/>
-      
+
+      <Search search={search} setSearch={setSearch} />
+      <Filter filter={filter} setFilter={setFilter} setSort={setSort} />
+
       <div className="todo-list">
         {todos
           .filter((todo) => {
@@ -111,17 +135,29 @@ function App() {
             if (filter === "Incomplete") return todo.isCompleted === false;
             return true;
           })
-          .filter((todo) => todo.text.toLowerCase().includes(search.toLowerCase()))
-          .sort((a, b) => sort === "Asc" ? a.text.localeCompare(b.text) : b.text.localeCompare(a.text))
+          .filter(
+            (todo) =>
+              todo.titulo &&
+              todo.titulo.toLowerCase().includes(search.toLowerCase())
+          )
+          .sort((a, b) =>
+            sort === "Asc"
+              ? a.titulo.localeCompare(b.titulo)
+              : b.titulo.localeCompare(a.titulo)
+          )
           .map((todo) => (
-            <Todo key={todo.id} todo={todo} removeTodo={removeTodo} completeTodo={completeTodo}/>
-          ))
-        }
+            <Todo
+              key={todo.id}
+              todo={todo}
+              removeTodo={removeTodo}
+              completeTodo={completeTodo}
+            />
+          ))}
       </div>
-      
-      <TodoForm addTodo={addTodo}/>
+
+      <TodoForm addTodo={addTodo} />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
