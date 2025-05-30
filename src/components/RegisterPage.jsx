@@ -94,8 +94,10 @@ const RegisterPage = ({ onRegister, onSwitchToLogin }) => {
           return response.json();
         })
         .then((data) => {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("userId", data.user.id);
           console.log("Registro bem-sucedido:", data);
-          setSuccess("Conta criada com sucesso! Você pode fazer login agora.");
+          onRegister(formData);
 
           // Limpar formulário
           setFormData({

@@ -111,12 +111,12 @@ const LoginPage = ({ onLogin, onSwitchToRegister }) => {
         <div className="register-help">
           <p>Ainda não tem uma conta? </p>
           <button
-          type="button"
-          className="link-button"
-          disabled={isLoading}
-          onClick={onSwitchToRegister} // <-- Chama a função que alterna para a página de registro
+            type="button"
+            className="link-button"
+            disabled={isLoading}
+            onClick={onSwitchToRegister} // <-- Chama a função que alterna para a página de registro
           >
-          Faça registro aqui
+            Faça registro aqui
           </button>
         </div>
       </div>
