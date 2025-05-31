@@ -15,13 +15,13 @@ const Todo = ({ todo, removeTodo, completeTodo, editTodo }) => {
   const getPriorityColor = (prioridade) => {
     switch (prioridade) {
       case "alta":
-        return "#ff4757"; // Vermelho
+        return "#EF4444"; // Vermelho
       case "media":
-        return "#ffa502"; // Amarelo
+        return "#F59E0B"; // Amarelo
       case "baixa":
-        return "#2ed573"; // Verde
+        return "#10B981"; // Verde
       default:
-        return "#747d8c"; // Cinza padrão
+        return "#8B5CF6"; // Cinza padrão
     }
   };
 
@@ -29,13 +29,13 @@ const Todo = ({ todo, removeTodo, completeTodo, editTodo }) => {
   const getPriorityText = (prioridade) => {
     switch (prioridade) {
       case "alta":
-        return "🔴 Alta";
+        return "Alta";
       case "media":
-        return "🟡 Média";
+        return "Média";
       case "baixa":
-        return "🟢 Baixa";
+        return "Baixa";
       default:
-        return "🟡 Média";
+        return "Média";
     }
   };
 
@@ -148,7 +148,10 @@ const Todo = ({ todo, removeTodo, completeTodo, editTodo }) => {
             </h3>
             <div
               className="priority-badge"
-              style={{ color: getPriorityColor(todo.prioridade) }}
+              style={{
+                background: getPriorityColor(todo.prioridade),
+                borderRadius: "0.45rem",
+              }}
             >
               {getPriorityText(todo.prioridade)}
             </div>
