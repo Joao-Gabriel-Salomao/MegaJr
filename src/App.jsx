@@ -54,7 +54,7 @@ function App() {
   }, [token, userId, tipoListagem]);
 
   const addTodo = (titulo, desc, data, prioridade) => {
-    fetch("127.0.0.1:3000/tarefas", {
+    fetch("http://127.0.0.1:3000/tarefas", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -69,13 +69,19 @@ function App() {
         timezone: "America/Cuiaba",
       }),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        setTodos(data);
-      })
-      .catch((error) => {
-        console.error("Erro:", error);
-      });
+      .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Erro ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data); // 👀 Verifique o que o backend retorna aqui
+      setTodos((prevTodos) => [...prevTodos, data.tarefa]);
+    })
+    .catch((error) => {
+      console.error("Erro:", error);
+    });
   };
 
   const removeTodo = (id) => {
