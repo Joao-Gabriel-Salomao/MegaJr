@@ -10,8 +10,6 @@ import Filter from "./components/Filter";
 import LoginPage from "./components/LoginPage"; // Importar o componente de login
 import RegisterPage from "./components/RegisterPage";
 
-
-
 function App() {
   const [todos, setTodos] = useState([]);
 
@@ -145,13 +143,16 @@ const editTodo = (id, updatedTodo) => {
   // Se não estiver autenticado, mostrar página de login
   if (!isAuthenticated) {
     return showRegister ? (
-    <RegisterPage onSwitchToLogin={() => setShowRegister(false)} />
-  ) : (
-    <LoginPage 
-      onLogin={handleLogin} 
-      onSwitchToRegister={() => setShowRegister(true)} 
-    />
-  );
+      <RegisterPage
+        onRegister={handleLogin}
+        onSwitchToLogin={() => setShowRegister(false)}
+      />
+    ) : (
+      <LoginPage
+        onLogin={handleLogin}
+        onSwitchToRegister={() => setShowRegister(true)}
+      />
+    );
   }
 
   // Se estiver autenticado, mostrar a aplicação principal
