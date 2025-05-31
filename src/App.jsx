@@ -25,33 +25,35 @@ function App() {
   const [currentUser, setCurrentUser] = useState("");
 
   useEffect(() => {
-    fetch(
-      `http://127.0.0.1:3000/tarefas?usuario_id=${userId}&tipoListagem=${tipoListagem}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      }
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Erro ${response.status}`);
+    if (isAuthenticated) {
+      fetch(
+        `http://127.0.0.1:3000/tarefas?usuario_id=${userId}&tipoListagem=${tipoListagem}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
         }
-        return response.json();
-      })
-      .then((data) => {
-        const todosComEstado = data.tarefa.map((t) => ({
-          ...t,
-          isCompleted: !!t.concluida, // converte para boolean (p.ex.: 0/1 → true/false)
-        }));
-        setTodos(todosComEstado);
-      })
-      .catch((error) => {
-        console.error("Erro:", error);
-      });
-  }, [token, userId, tipoListagem]);
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Erro ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          const todosComEstado = data.tarefa.map((t) => ({
+            ...t,
+            isCompleted: !!t.concluida, // converte para boolean (p.ex.: 0/1 → true/false)
+          }));
+          setTodos(todosComEstado);
+        })
+        .catch((error) => {
+          console.error("Erro:", error);
+        });
+    }
+  }, [token, userId, tipoListagem, isAuthenticated]);
 
   const addTodo = (titulo, desc, data, prioridade) => {
     fetch("http://127.0.0.1:3000/tarefas", {
@@ -176,6 +178,47 @@ function App() {
       });
   };
 
+  const completedTodosCount = todos.filter((todo) => todo.isCompleted).length;
+
+  const removeAllCompleted = () => {
+    const completedCount = todos.filter((todo) => todo.isCompleted).length;
+    if (completedCount > 0) {
+      if (
+        window.confirm(
+          `Deseja realmente remover ${completedCount} tarefa(s) concluída(s)?`
+        )
+      ) {
+        fetch(`http://127.0.0.1:3000/tarefas/all`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify({
+            usuario_id: userId,
+          }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`Erro ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Removidas com sucesso:", data);
+            setTodos((prevTodos) =>
+              prevTodos.filter((todo) => !todo.isCompleted)
+            );
+          })
+          .catch((error) => {
+            console.error("Erro:", error);
+          });
+
+        setTodos((prevTodos) => prevTodos.filter((todo) => !todo.isCompleted));
+      }
+    }
+  };
+
   // Função para fazer login
   const handleLogin = (userData) => {
     setCurrentUser(userData.username);
@@ -220,6 +263,14 @@ function App() {
 
       <Search search={search} setSearch={setSearch} />
       <Filter filter={tipoListagem} setTipoListagem={setTipoListagem} />
+
+      {completedTodosCount > 0 && (
+        <div className="bulk-actions">
+          <button onClick={removeAllCompleted} className="remove-completed-btn">
+            🗑️ Remover {completedTodosCount} tarefa(s) concluída(s)
+          </button>
+        </div>
+      )}
 
       <div className="todo-list">
         {todos
