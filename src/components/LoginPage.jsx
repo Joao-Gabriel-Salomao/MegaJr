@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "./LoginPage.css"; // Arquivo CSS que criaremos
 
-const LoginPage = ({ onLogin, onSwitchToRegister }) => {
+const LoginPage = ({ onLogin, onSwitchToRegister
+ }) => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",

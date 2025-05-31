@@ -96,6 +96,39 @@ function App() {
     setTodos(newTodos);
   };
 
+  // ✅ Função para editar uma tarefa
+const editTodo = (id, updatedTodo) => {
+  fetch(`http://127.0.0.1:3000/tarefas/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+    body: JSON.stringify({
+      titulo: updatedTodo.titulo,
+      descricao: updatedTodo.descricao,
+      data_hora: updatedTodo.data_hora,
+      prioridade: updatedTodo.prioridade,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Erro ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(() => {
+      const newTodos = todos.map((todo) =>
+        todo.id === id ? { ...todo, ...updatedTodo } : todo
+      );
+      setTodos(newTodos);
+    })
+    .catch((error) => {
+      console.error("Erro ao editar:", error);
+      alert("Erro ao editar a tarefa!");
+    });
+};
+
   // Função para fazer login
   const handleLogin = (userData) => {
     setCurrentUser(userData.username);
@@ -162,6 +195,7 @@ function App() {
               todo={todo}
               removeTodo={removeTodo}
               completeTodo={completeTodo}
+              editTodo={editTodo}
             />
           ))}
       </div>
