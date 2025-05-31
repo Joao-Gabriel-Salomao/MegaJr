@@ -228,6 +228,7 @@ function App() {
   // Função para fazer logout
   const handleLogout = () => {
     setIsAuthenticated(false);
+    localStorage.clear();
     setCurrentUser("");
     setTodos([]); // Limpar todos ao fazer logout
   };
