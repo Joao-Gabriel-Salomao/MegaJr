@@ -17,9 +17,6 @@ function App() {
 
   const [showRegister, setShowRegister] = useState(false);
 
-  const [filter, setFilter] = useState("All");
-  const [sort, setSort] = useState("Asc");
-
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
   const [tipoListagem, setTipoListagem] = useState("concluida");
@@ -76,7 +73,7 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        console.log(data); // 👀 Verifique o que o backend retorna aqui
+        console.log(data);
         setTodos((prevTodos) => [...prevTodos, data.tarefa]);
       })
       .catch((error) => {
@@ -85,13 +82,8 @@ function App() {
   };
 
   const removeTodo = (id) => {
-    const newTodos = [...todos];
-    const filteredTodos = newTodos.filter((todo) =>
-      todo.id !== id ? todo : null
-    );
-    setTodos(filteredTodos);
-    fetch(`127.0.0.1:3000/tarefas/`, {
-      method: "DEL",
+    fetch(`http://127.0.0.1:3000/tarefas/`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: token,
@@ -108,8 +100,8 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
-        setTodos((prevTodos) => [...prevTodos, data.tarefa]);
+        console.log("Removido com sucesso:", data);
+        setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
       })
       .catch((error) => {
         console.error("Erro:", error);
@@ -124,7 +116,6 @@ function App() {
     setTodos(newTodos);
   };
 
-  // ✅ Função para editar uma tarefa
   const editTodo = (id, updatedTodo) => {
     fetch(`http://127.0.0.1:3000/tarefas/`, {
       method: "PUT",
@@ -202,25 +193,14 @@ function App() {
       </div>
 
       <Search search={search} setSearch={setSearch} />
-      <Filter filter={filter} setFilter={setFilter} setSort={setSort} />
+      <Filter filter={tipoListagem} setTipoListagem={setTipoListagem} />
 
       <div className="todo-list">
         {todos
-          .filter((todo) => {
-            if (filter === "All") return true;
-            if (filter === "Completed") return todo.isCompleted === true;
-            if (filter === "Incomplete") return todo.isCompleted === false;
-            return true;
-          })
           .filter(
             (todo) =>
               todo.titulo &&
               todo.titulo.toLowerCase().includes(search.toLowerCase())
-          )
-          .sort((a, b) =>
-            sort === "Asc"
-              ? a.titulo.localeCompare(b.titulo)
-              : b.titulo.localeCompare(a.titulo)
           )
           .map((todo) => (
             <Todo

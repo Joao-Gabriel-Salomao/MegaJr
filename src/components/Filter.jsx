@@ -1,24 +1,17 @@
-const Filter = ({filter, setFilter, setSort}) => {
+const Filter = ({ filter, setTipoListagem }) => {
   return (
     <div className="filter">
-      <h2>Filtrar:</h2>
-      <div className="filter-options">
-        <div>
-            <p>Status:</p>
-            <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-                <option value="All">Todas</option>
-                <option value="Completed">Completas</option>
-                <option value="Incomplete">Incompletas</option>
-            </select>
-        </div>
-        <div>
-            <p>Ordem alfabética:</p>
-            <button onClick={() => setSort("Asc")}>A-Z</button>
-            <button onClick={() => setSort("Desc")}>Z-A</button>
-        </div>
-      </div>
+      <select
+        value={filter}
+        onChange={(e) => setTipoListagem(e.target.value)}
+        className="filter-select"
+      >
+        <option value="concluida">Concluída</option>
+        <option value="data_hora">Data/Hora</option>
+        <option value="prioridade">Prioridade</option>
+      </select>
     </div>
-  )
-}
+  );
+};
 
-export default Filter
+export default Filter;
