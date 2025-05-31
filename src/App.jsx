@@ -19,7 +19,7 @@ function App() {
 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  const [tipoListagem, setTipoListagem] = useState("concluida");
+  const [tipoListagem, setTipoListagem] = useState("data_hora");
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
@@ -42,8 +42,11 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        console.log(data.tarefa);
-        setTodos(data.tarefa);
+        const todosComEstado = data.tarefa.map((t) => ({
+          ...t,
+          isCompleted: !!t.concluida, // converte para boolean (p.ex.: 0/1 → true/false)
+        }));
+        setTodos(todosComEstado);
       })
       .catch((error) => {
         console.error("Erro:", error);
@@ -109,11 +112,34 @@ function App() {
   };
 
   const completeTodo = (id) => {
-    const newTodos = [...todos];
-    newTodos.map((todo) =>
-      todo.id === id ? (todo.isCompleted = !todo.isCompleted) : todo
-    );
-    setTodos(newTodos);
+    fetch(`http://127.0.0.1:3000/tarefas/concluir`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+      body: JSON.stringify({
+        id: id,
+        usuario_id: userId,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Erro ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Tarefa concluída com sucesso:", data);
+        setTodos((prevTodos) =>
+          prevTodos.map((todo) =>
+            todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo
+          )
+        );
+      })
+      .catch((error) => {
+        console.error("Erro ao concluir tarefa:", error);
+      });
   };
 
   const editTodo = (id, updatedTodo) => {

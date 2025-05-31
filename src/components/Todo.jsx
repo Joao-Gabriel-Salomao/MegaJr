@@ -7,7 +7,9 @@ const Todo = ({ todo, removeTodo, completeTodo, editTodo }) => {
   const [editDataHora, setEditDataHora] = useState(
     todo.data_hora ? todo.data_hora.slice(0, 16) : ""
   );
-  const [editPrioridade, setEditPrioridade] = useState(todo.prioridade || "media");
+  const [editPrioridade, setEditPrioridade] = useState(
+    todo.prioridade || "media"
+  );
 
   // Função para obter a cor da prioridade
   const getPriorityColor = (prioridade) => {
@@ -71,15 +73,15 @@ const Todo = ({ todo, removeTodo, completeTodo, editTodo }) => {
   };
 
   return (
-    <div 
+    <div
       className={`todo ${todo.isCompleted ? "completed" : ""}`}
-      style={{ 
+      style={{
         borderLeft: `5px solid ${getPriorityColor(todo.prioridade)}`,
         marginBottom: "15px",
         padding: "15px",
-        backgroundColor: "#f8f9fa",
+        backgroundColor: todo.isCompleted ? "#e9ecef" : "#f8f9fa",
         borderRadius: "8px",
-        boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
       }}
     >
       {isEditing ? (
@@ -144,18 +146,23 @@ const Todo = ({ todo, removeTodo, completeTodo, editTodo }) => {
             <h3 className={todo.isCompleted ? "completed-text" : ""}>
               {todo.titulo}
             </h3>
-            <div className="priority-badge" style={{ color: getPriorityColor(todo.prioridade) }}>
+            <div
+              className="priority-badge"
+              style={{ color: getPriorityColor(todo.prioridade) }}
+            >
               {getPriorityText(todo.prioridade)}
             </div>
           </div>
 
-          <p className={`todo-description ${todo.isCompleted ? "completed-text" : ""}`}>
+          <p
+            className={`todo-description ${
+              todo.isCompleted ? "completed-text" : ""
+            }`}
+          >
             {todo.descricao || "Sem descrição"}
           </p>
 
-          <div className="todo-date">
-            📅 {formatDate(todo.data_hora)}
-          </div>
+          <div className="todo-date">📅 {formatDate(todo.data_hora)}</div>
 
           <div className="todo-actions">
             <button
@@ -165,17 +172,16 @@ const Todo = ({ todo, removeTodo, completeTodo, editTodo }) => {
               {todo.isCompleted ? "↩️ Reabrir" : "✅ Concluir"}
             </button>
 
-            <button
-              className="edit-btn"
-              onClick={() => setIsEditing(true)}
-            >
+            <button className="edit-btn" onClick={() => setIsEditing(true)}>
               ✏️ Editar
             </button>
 
             <button
               className="remove-btn"
               onClick={() => {
-                if (window.confirm("Tem certeza que deseja excluir esta tarefa?")) {
+                if (
+                  window.confirm("Tem certeza que deseja excluir esta tarefa?")
+                ) {
                   removeTodo(todo.id);
                 }
               }}
