@@ -89,8 +89,8 @@ A estrutura de pastas segue uma organização modular para facilitar a manutenç
 
 ```
 MegaJr/
-│   ├── assets/
-│   │   └── screenshots/
+├── assets/
+│   └── screenshots/
 ├── public/
 ├── src/
 │   ├── components/
