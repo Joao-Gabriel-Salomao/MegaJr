@@ -8,6 +8,7 @@ Este repositório contém o frontend de um sistema de gerenciamento de tarefas c
 
 [MegaJr - Frontend](https://github.com/Joao-Gabriel-Salomao/MegaJr) <br>
 [MegaJr - Backend](https://github.com/AbelardoOk/toDoList-Mega)
+[Documentação Completa](https://docs.google.com/document/d/13334wMwtTlZCZsV0eSGxtsVFxKBCa5G7zJau6qISgv8/edit?usp=sharing)
 
 ---
 
